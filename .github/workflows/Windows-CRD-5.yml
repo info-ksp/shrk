@@ -1,0 +1,34 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Windows-CRD-5
+
+on: 
+  workflow_dispatch:
+    inputs:
+      authcode:
+        description: 'Enter CRD code'
+        required: false
+        # required: true
+      pincode:
+        description: 'Six digit Pin'
+        required: false
+#         required: true
+  
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Initializing Setup KSP
+      run: ./setup.ps1
+    # - name: rdp on
+#       run: ./rdp_on.ps1
+#     - name: Starting CRD 
+#       run: ${{ github.event.inputs.authcode }} -pin=${{ github.event.inputs.pincode }}
+#       run: ${{ github.event.inputs.authcode }} -pin='542543'
+    - name: Keep Alive
+      run: ./timeout.ps1
+
+  
+    
