@@ -1,0 +1,31 @@
+name: Windows - KSP RDP - Anydesk
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Built Connection to KSP_TECH
+    runs-on: windows-latest
+    timeout-minutes: 9999
+    
+    steps:
+      - name: res_ing
+        run: Install-Module -Name DisplaySettings -AllowClobber -Force
+      - name: res_cng
+        run: Set-DisplayResolution -Width 1920 -Height 1080
+      - name: Downloading & Installing Essentials
+        run: |
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/khalid-ofcl/rdp-files/main/ksp_tech_rdp.bat" -OutFile "ksp_tech_rdp.bat"
+          cmd /c ksp_tech_rdp.bat
+          
+      - name: Enable TS
+        run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+      - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+      - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+
+      - name: Log In To AnyDesk
+        run: cmd /c start_rdp.bat
+
+      - name: Time Counter
+        run: Start-Sleep -Seconds 21600
